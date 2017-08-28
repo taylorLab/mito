@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ left=20mm,
+ top=20mm,
+ right=15mm,
+ bottom=20mm
+ }
+\usepackage{setspace}
+\usepackage{graphicx} % for adding graphics (e.g. plots, diagrams)
+\usepackage{color} % red pen!
+\usepackage{natbib}
+\usepackage{pdfpages}
+
+
+\begin{document}
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(185,255)
+
+\put(0,0){\hbox{\includegraphics[width=150mm]{./mCircos.jpg}}}
+\put(0,135){\hbox{\includegraphics[width=50mm]{./chrM_for.pdf}}}
+\put(50,135){\hbox{\includegraphics[width=50mm]{./chrM_rev.pdf}}}
+\put(0,175){\hbox{\includegraphics[width=130mm]{./trinuc.pdf}}}
+\put(0,225){\hbox{\includegraphics[width=130mm]{./freqdist.pdf}}}
+\put(130,225){\hbox{\includegraphics[width=40mm]{./readStarts.pdf}}}
+\put(130,190){\hbox{\includegraphics[width=40mm]{./readEnds.pdf}}}
+\put(50,260){$A.$}
+\put(90,260){$B.$}
+\put(130,250){$C.$}
+\put(130,225){$D.$}
+\put(0,220){$E.$}
+\put(45,220){$F.$}
+\put(90,220){$G.$}
+\put(0,170){$H.$}
+\put(50,170){$I.$}
+\put(10,130){$J.$}
+\end{picture}
+
+
+\end{document}

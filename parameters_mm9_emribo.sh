@@ -1,0 +1,14 @@
+export GENOME=mm9chrMrDNAmasked
+export GENOSHORT=mm9
+export GENOMECIRC=mm9chrMrDNAmaskedchrMCirc
+export MASTER=/exports/igmm/datastore/taylorGoldenCopy/EMRIBOSEQ/FASTQ
+export SRC=/exports/igmm/eddie/taylor-lab/martin/mouseRibo-proj/scripts
+export SCRATCH=/exports/igmm/eddie/taylor-lab/martin/mouseRibo-proj/mouse/
+export GENOMEPATH=${SCRATCH}/GENOME
+export GENOMEFASTA=${GENOMEPATH}/mm9ucChrMdoubled.fa
+export NMBASE=${NM}.${GENOME}
+export FLIPSTRAND=1
+export LOG=${SCRATCH}/RUNLOGS
+export LENCIRC=16299
+export OFFSET=-1
+export ANNO=${SCRATCH}/libraryAnnotation.txt

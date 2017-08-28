@@ -1,0 +1,52 @@
+
+NM<-Sys.getenv(c("NM"))
+GENOMEPATH<-Sys.getenv(c("GENOMEPATH"))
+GENOSHORT<-Sys.getenv(c("GENOSHORT"))
+DESC<-Sys.getenv(c("DESC"))
+dSeq<-read.table(file=paste(NM,".trimmedSeqDist",sep=""),header=F)
+dAln<-read.table(file=paste(NM,".alnSeqDist",sep=""),header=F)
+dAlnM<-read.table(file=paste(NM,".alnSeqDistchrM",sep=""),header=F)
+idx<-read.table(file=paste(NM,".idxstats",sep=""),header=F)
+genomeCount<-read.table(paste(GENOMEPATH,"/",GENOSHORT,"WholeGenomeMap100.compo",sep=""),header=T)
+mitochCount<-read.table(paste(GENOMEPATH,"/chrM.compo",sep=""),header=T)
+fracChrMReads<-sum(dAlnM$V2)/sum(dAln$V2)
+fracChrMGenome<-sum(as.numeric(mitochCount[2:65]))/(sum(as.numeric(genomeCount[2:65]))+sum(as.numeric(mitochCount[2:65])))
+relChrMEnrichment<-signif(fracChrMReads/fracChrMGenome,3)
+
+xBounds<-c(min(dSeq[,1]),max(dSeq[,1]))
+num<-dim(dSeq)[1]
+
+#pdf(file=paste(NM,"_freqdist.pdf",sep=""),width=6,height=3)
+pdf(file="freqdist.pdf",width=9,height=3)
+layout(matrix(c(1,2,3),1,3))
+par(mar=c(0,0,0,0))
+plot(c(0,1),c(0,1.2),type="n",axes=F,xlab="",ylab="")
+text(0,1.1,NM,cex=1.5,col="black",pos=4)
+text(0.1,0.9,DESC,col="darkgrey",pos=4,cex=1.2)
+text(0.1,0.7,paste(sum(dSeq$V2)," total reads",sep=""),cex=1.5,col="darkgrey",pos=4)
+text(0.1,0.5,paste(signif((sum(dAln$V2)/sum(dSeq$V2))*100,3),"% mapped to",GENOSHORT,sep=""),cex=1.5,col="darkgrey",pos=4)
+text(0.1,0.3,paste(signif(fracChrMReads*100,3),"% chrM reads",sep=""),cex=1.5,col="darkgrey",pos=4)
+text(0.1,0.1,paste(relChrMEnrichment," fold relative chrM enrichment",sep=""),cex=1.5,col="darkgrey",pos=4)
+par(mar=c(4,4,4,3))
+plot(dSeq[,1],dSeq[,2],axes=F,main="Read length distribution",xlim=xBounds,type="n",xlab="Read length (nt)",ylab="Count")
+axis(1,at=c(xBounds[1],100,200,xBounds[2]))
+polygon(c(xBounds[1],dSeq[,1],num),c(0,dSeq[,2],0),col="grey",border=F)
+polygon(c(xBounds[1],dAln[,1],num),c(0,dAln[,2],0),col="darkred",border=F)
+legend(xBounds[2]*.6,max(dSeq[,2])*.8,c("Trimmed reads","Aligned reads"),bty="n",col=c("grey","darkred"),pch=20,cex=.6)
+
+dSeqOne<-dSeq[,2]/sum(dSeq[,2])
+dAlnOne<-dAln[,2]/sum(dAln[,2])
+dAlnMOne<-dAlnM[,2]/sum(dAlnM[,2])
+yBounds<-c(0,max(c(dSeqOne,dAlnOne,dAlnMOne)))
+
+dSeq[,3]=dSeq[,1]*dSeq[,2]
+dSeqMean<-sum(as.numeric(dSeq[,3]))/sum(as.numeric(dSeq[,2]))
+
+
+plot(dSeq[,1],dSeqOne,axes=F,main="Read length distribution",xlim=xBounds,type="n",xlab="Read length (nt)",ylab="Density",ylim=yBounds)
+axis(1,at=c(xBounds[1],floor(dSeqMean),xBounds[2]))
+points(dSeq[,1],dSeqOne,type="l",lwd=2,col="grey")
+points(dAln[,1],dAlnOne,type="l",lwd=2,col="darkred")
+points(dAlnM[,1],dAlnMOne,type="l",lwd=2,col="blue")
+legend(xBounds[2]*.6,max(yBounds[2])*.8,c("Trimmed reads","Nuclear mapping","chrM Mapping"),bty="n",col=c("grey","darkred","blue"),pch=20,cex=.6)
+dev.off()
